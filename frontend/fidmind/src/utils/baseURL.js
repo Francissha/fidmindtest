@@ -1,5 +1,11 @@
-const getBaseUrl = () => {
-    return 'https://xyztest.onrender.com';  // Production URL
-}
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-export default getBaseUrl;
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    outDir: 'dist',  // Ensure this points to the correct output folder
+    chunkSizeWarningLimit: 2000,  // Set your desired chunk size warning limit in kB
+  },
+})
