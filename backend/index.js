@@ -1,42 +1,50 @@
-const express = require('express')
-const app = express()
-const cors = require("cors");
-const mpesaRoutes = require("./mpesaPayment/mpesaRoute");
+const express = require('express');
 const mongoose = require('mongoose');
-const port = process.env.PORT || 5000;
-require('dotenv').config()
+const cors = require("cors");
+const dotenv = require('dotenv');
 
+dotenv.config();
+
+const app = express();
+const port = process.env.PORT || 5000;
+
+// Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: ['https://xyztest-1.onrender.com', 'http://localhost:5173'], // Add frontend URL
   credentials: true
-}))
+}));
 
-//routes
-const bookRoutes = require('./src/books/book.route')
-const orderRoutes = require('./src/orders/order.route')
-const userRoutes = require('./src/users/user.route')
-const adminRoutes = require('./src/stats/admin.stats')
+// MongoDB Connection
+mongoose.connect(process.env.DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log("MongoDB connected successfully!"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
+// Routes
+const bookRoutes = require('./src/books/book.route');
+const orderRoutes = require('./src/orders/order.route');
+const userRoutes = require('./src/users/user.route');
+const adminRoutes = require('./src/stats/admin.stats');
+const mpesaRoutes = require("./mpesaPayment/mpesaRoute");
 
-app.use('/api/books', bookRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/auth', userRoutes)
-app.use('/api/admin', adminRoutes)
+// Use Routes
+app.use('/api/books', bookRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/api/admin', adminRoutes);
 app.use("/api/mpesa", mpesaRoutes);
 
+// Serve Static Files (Images)
+app.use('/uploads', express.static('uploads')); // Ensure image storage path is correct
 
-// Connect to MongoDB
-async function main() {
-  await mongoose.connect(process.env.DB_URL);
-// routes 
-  app.use("/", (req, res) => {
-    res.send("Book Store Server is running!");
-  });
-}
+// Default Route
+app.get("/", (req, res) => {
+  res.send("Book Store Server is running!");
+});
 
-main().then(() => console.log("Mongodb connect successfully!")).catch(err => console.log(err));
-
+// Start Server
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Server running on port ${port}`);
+});
