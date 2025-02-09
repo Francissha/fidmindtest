@@ -37,11 +37,16 @@ const handleLogOut = () => {
         <span className='text-3xl font-semibold text-blue-500'>fidmind</span>
     </Link>
  
-         {/*search input*/}
-         <div className='relative sm:w-72 w-40 space-x-2'>
-         <IoSearchOutline className='absolute inline-block left-3 inset-y-2'/>
-         <input type ="text" placeholder='Search here' className='bg-slate-100 w-full py-1 md:px-8 rounded-md focus: outline-none'/>
-         </div>
+         
+       {/* Search Input */}
+<div className="relative sm:w-54 w-70 space-x-2 flex items-center">
+  <IoSearchOutline className="absolute left-3 sm:left-2 md:left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg" />
+  <input 
+    type="text" 
+    placeholder="Search here" 
+    className="bg-slate-100 w-full py-2 pl-10 sm:pl-8 md:pl-10 rounded-md focus:outline-none"
+  />
+</div>
 
         </div>
 
