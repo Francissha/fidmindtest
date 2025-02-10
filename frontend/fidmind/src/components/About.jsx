@@ -80,7 +80,7 @@ const About = () => {
           <div className="mt-6">
             <p className="text-lg text-gray-700">Location:Nakuru, Kenya</p>
             <p className="text-lg text-gray-700">Phone: +254 708 432 543</p>
-            <p className="text-lg text-gray-700">Email: fidmind@gmail.com</p>
+            <p className="text-lg text-gray-700">Email:https://xyztest-1.onrender.com/</p>
             <p className="text-lg text-gray-700">Website: <a href="https://www.fidmindbooks.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">www.fidmindbooks.com</a></p>
           </div>
         </div>
