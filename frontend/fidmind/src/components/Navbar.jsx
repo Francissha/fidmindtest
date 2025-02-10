@@ -9,6 +9,7 @@ import avatarImg from '../assets/avatar.png';  // Import avatar image
 import axios from 'axios';  // Import axios to fetch search results
 
 const navigation = [
+    { name: "Admin", href: "/admin" },
     { name: "Orders", href: "/orders" },
     { name: "Cart Page", href: "/cart" },
     { name: "Check Out", href: "/checkout" }
