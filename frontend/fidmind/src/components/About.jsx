@@ -1,6 +1,6 @@
 import React from 'react'
-import aboutUsImage from "../dist/assets/story-BkfKnMlJ.jpg";
-import profile from "../dist/assets/profile-CsdlH457.jpg";
+import aboutUsImage from "../assets/story.jpg";
+import profile from "../assets/books/profile.jpg";
 
 const About = () => {
   return (
