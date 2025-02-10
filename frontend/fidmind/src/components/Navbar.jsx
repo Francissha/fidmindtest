@@ -30,7 +30,7 @@ const Navbar = () => {
     e.preventDefault();
     try {
       // Make an API request to the backend with the search query
-      const response = await axios.get(`http://localhost:5000/api/books?query=${query}`);
+      const response = await axios.get(`https://xyztest.onrender.com/api/books?query=${query}`);
       setFilteredBooks(response.data); // Set filtered books in state
     } catch (error) {
       console.error("Error fetching filtered books", error);
