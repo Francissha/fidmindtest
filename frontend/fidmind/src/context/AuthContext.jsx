@@ -1,7 +1,7 @@
 
 import {  createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.config";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword } from "firebase/auth";
 
 const AuthContext =  createContext();
 
@@ -32,12 +32,32 @@ export const AuthProvide = ({children}) => {
     const signInWithGoogle = async () => {
      
         return await signInWithPopup(auth, googleProvider)
+         //result.user
     }
 
     // logout the user
     const logout = () => {
         return signOut(auth)
     }
+
+     // password reset
+     const doPasswordReset = async (email) => {
+        return await sendPasswordResetEmail(auth , email);
+     }
+
+     // password change
+     const doPasswordChange = async (password) => {
+        return await updatePassword(auth.currentUser, password);
+     }
+
+     // email verification
+
+     const doSendEmailVerification = async () =>{
+        return await doSendEmailVerification(auth.currentUser, {
+            url: `${window.location.origin}/home`
+        })
+     }
+
 
     // manage user
     useEffect(() => {
@@ -64,7 +84,10 @@ export const AuthProvide = ({children}) => {
         registerUser,
         loginUser,
         signInWithGoogle,
-        logout
+        logout,
+        doPasswordReset,
+        doPasswordChange,
+        doSendEmailVerification
     }
     return (
         <AuthContext.Provider value={value}>
