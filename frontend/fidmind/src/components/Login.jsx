@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form"
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
     const [message, setMessage] = useState("")
-    const { loginUser, signInWithGoogle} = useAuth();
+    const { loginUser, signInWithGoogle,doPasswordReset} = useAuth();
     const navigate = useNavigate()
     const {
         register,
@@ -36,8 +36,24 @@ const Login = () => {
             console.error(error)
         }
       }
+
+          const handleForgotPassword = async () => {
+        const email = prompt("Please enter your email address to reset your password:");
+        if (email) {
+            try {
+                await doPasswordReset(email); // Calling doPasswordReset from AuthContext
+                alert("Password reset email sent!");
+            } catch (error) {
+                alert("Error resetting password. Please try again.");
+                console.error(error);
+            }
+        }
+    };
+
   return (
     <div className='h-[calc(100vh-120px)] flex justify-center items-center '>
+        {/*if user is logged in he is taken directly to homepage*/}
+      
         <div className='w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
             <h2 className='text-xl font-semibold mb-4'>Please Login</h2>
 
@@ -76,7 +92,12 @@ const Login = () => {
                 Sign in with Google
                 </button>
             </div>
-
+  {/* Forgot Password Link */}
+                <p className='text-sm mt-4'>
+                    <button onClick={handleForgotPassword} className='text-blue-500 hover:text-blue-700'>
+                        Forgot Password?
+                    </button>
+                </p>
 
             <p className='mt-5 text-center text-gray-500 text-xs'>©2025 FIDMIND Book Store. All rights reserved.</p>
         </div>
