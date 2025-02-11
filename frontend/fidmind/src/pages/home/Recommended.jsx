@@ -33,7 +33,7 @@ const Recommended = () => {
 
   return (
     <div className='py-10'>
-      <h2 className='text-3xl font-semibold mb-6'>Recommended for You</h2>
+      <h2 className='text-3xl font-semibold mb-6'>Fidmind Top Picks</h2>
 
       {/* Swiper Slider for Books */}
       <Swiper
