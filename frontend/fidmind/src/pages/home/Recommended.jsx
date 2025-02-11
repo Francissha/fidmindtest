@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BookCard from '../books/BookCard';
 
 // Import Swiper React components
@@ -24,13 +24,18 @@ const chunkArray = (array, size) => {
 const Recommended = () => {
   const { data: books = [] } = useFetchAllBooksQuery();
 
+  // Filter trending books (Assuming books have a `isTrending` field or a `sales` count)
+  const trendingBooks = books
+    .filter(book => book.isTrending || book.sales > 50) // Adjust the sales threshold as needed
+    .sort((a, b) => b.sales - a.sales); // Sort trending books by highest sales
+
   // Split books into chunks (Each chunk contains books for 3 rows)
   const booksPerPage = 6;
-  const bookChunks = chunkArray(books, booksPerPage);
+  const bookChunks = chunkArray(trendingBooks, booksPerPage);
 
   return (
     <div className='py-10'>
-      <h2 className='text-3xl font-semibold mb-6'>Fidmind Collection</h2>
+      <h2 className='text-3xl font-semibold mb-6'>Trending Books</h2>
 
       {/* Swiper Slider for Books */}
       <Swiper
@@ -48,7 +53,7 @@ const Recommended = () => {
             </div>
           </SwiperSlide>
         )) : (
-          <p className="text-gray-500 text-center col-span-full">No books available.</p>
+          <p className="text-gray-500 text-center col-span-full">No trending books available.</p>
         )}
       </Swiper>
     </div>
