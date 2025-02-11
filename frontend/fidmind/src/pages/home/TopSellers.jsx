@@ -39,7 +39,7 @@ const TopSellers = () => {
     : books.filter(book => book.category === selectedCategory.toLowerCase());
 
   // Split books into chunks (Each chunk contains books for 3 rows)
-  const booksPerPage = 9; // 3 rows * 3 books per row = 9 books per page
+  const booksPerPage = 12; // 3 rows * 3 books per row = 9 books per page
   const bookChunks = chunkArray(filteredBooks, booksPerPage);
 
   return (
@@ -85,3 +85,4 @@ const TopSellers = () => {
 };
 
 export default TopSellers;
+
