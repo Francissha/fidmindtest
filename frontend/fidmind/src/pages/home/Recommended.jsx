@@ -1,67 +1,59 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
+import BookCard from '../books/BookCard';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-// import required modules
-import { Pagination, Navigation } from 'swiper/modules';
+// Import required modules
+import { Pagination } from 'swiper/modules';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import BookCard from '../books/BookCard';
 import { useFetchAllBooksQuery } from '../../redux/books/booksApi';
 
-
+// Function to split books into chunks
+const chunkArray = (array, size) => {
+  const chunkedArr = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunkedArr.push(array.slice(i, i + size));
+  }
+  return chunkedArr;
+};
 
 const Recommended = () => {
-    const {data: books =[]} = useFetchAllBooksQuery();
+  const { data: books = [] } = useFetchAllBooksQuery();
+
+  // Split books into chunks (Each chunk contains books for 3 rows)
+  const booksPerPage = 6;
+  const bookChunks = chunkArray(books, booksPerPage);
 
   return (
-    <div className='py-16'>
-       <h2 className='text-3xl font-semibold mb-6'>Fidmind Top Picks</h2>
-                    <Swiper
-                slidesPerView={1}
-                spaceBetween={30}
-                navigation={true}
-                breakpoints={{
-                    640: {
-                        slidesPerView: 1,
-                        spaceBetween: 20,
-                    },
-                    768: {
-                        slidesPerView: 2,
-                        spaceBetween: 40,
-                    },
-                    1024: {
-                        slidesPerView: 2,
-                        spaceBetween: 50,
-                    },
-                    1180: {
-                        slidesPerView: 3,
-                        spaceBetween: 50,
-                    }
-                }}
-                modules={[Pagination, Navigation]}
-                className="mySwiper"
-            >
+    <div className='py-10'>
+      <h2 className='text-3xl font-semibold mb-6'>Fidmind Collection</h2>
 
-                {
-                   books.length > 0 && books.slice(8, 18).map((book, index) => (
-                        <SwiperSlide key={index}>
-                            <BookCard  book={book} />
-                        </SwiperSlide>
-                    ))
-                }
-
-
-
-            </Swiper>
-
+      {/* Swiper Slider for Books */}
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={20}
+        modules={[Pagination]} // Removed Navigation
+        className="mySwiper"
+      >
+        {bookChunks.length > 0 ? bookChunks.map((chunk, index) => (
+          <SwiperSlide key={index}>
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {chunk.map((book) => (
+                <BookCard key={book._id} book={book} />
+              ))}
+            </div>
+          </SwiperSlide>
+        )) : (
+          <p className="text-gray-500 text-center col-span-full">No books available.</p>
+        )}
+      </Swiper>
     </div>
-  )
-}
+  );
+};
 
+export default Recommended;
 
-export default Recommended
