@@ -25,7 +25,7 @@ const TopSellers = () => {
   const { data: books = [] } = useFetchAllBooksQuery();
 
   // Split books into chunks (Each chunk contains books for 3 rows)
-  const booksPerPage = 9;
+  const booksPerPage = 6;
   const bookChunks = chunkArray(books, booksPerPage);
 
   return (
