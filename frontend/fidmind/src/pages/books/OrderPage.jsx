@@ -25,7 +25,7 @@ const OrderPage = () => {
                                 <p className="text-gray-600">Phone: {order.phone}</p>
                                 <p className="text-gray-600">Total Price: ksh{order.totalPrice}</p>
                                 <h3 className="font-semibold mt-2">Address:</h3>
-                                <p> {order.address.city}, {order.address.district}, {order.address.country}, {order.address.zipcode}</p>
+                                <p> {order.address.city}, {order.address.district}, {order.address.country}</p>
                                 
                                 <h3 className="font-semibold mt-2">Products Id:</h3>
                                 <ul>
