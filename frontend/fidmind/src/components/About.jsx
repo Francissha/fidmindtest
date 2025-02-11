@@ -49,7 +49,7 @@ const About = () => {
               <img
                 src={profile}
                 alt="Francis Ikonge"
-                className="w-80 h-80 rounded-full mx-auto mb-4"
+                className="w-60 h-60 rounded-full mx-auto mb-4"
               />
               <h3 className="text-xl font-semibold text-blue-500">Francis Ikonge</h3>
               <p className="text-md text-gray-700">Founder, I.T Enthusiast <br/>Teacher (Physics & Chemistry)</p>
