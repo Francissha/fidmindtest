@@ -41,7 +41,7 @@ const Recommended = () => {
       <Swiper
         slidesPerView={1}
         spaceBetween={20}
-        modules={[Pagination]} // Removed Navigation
+        modules={[Pagination]} 
         className="mySwiper"
       >
         {bookChunks.length > 0 ? bookChunks.map((chunk, index) => (
