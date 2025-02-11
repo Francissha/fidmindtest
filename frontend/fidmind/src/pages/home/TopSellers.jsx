@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import BookCard from '../books/BookCard';
 
@@ -39,7 +40,7 @@ const TopSellers = () => {
     : books.filter(book => book.category === selectedCategory.toLowerCase());
 
   // Split books into chunks (Each chunk contains books for 3 rows)
-  const booksPerPage = 12; // 3 rows * 3 books per row = 9 books per page
+  const booksPerPage = 9; // 3 rows * 3 books per row = 9 books per page
   const bookChunks = chunkArray(filteredBooks, booksPerPage);
 
   return (
@@ -70,7 +71,7 @@ const TopSellers = () => {
       >
         {bookChunks.length > 0 ? bookChunks.map((chunk, index) => (
           <SwiperSlide key={index}>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {chunk.map((book) => (
                 <BookCard key={book._id} book={book} />
               ))}
