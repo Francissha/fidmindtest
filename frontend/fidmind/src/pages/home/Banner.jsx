@@ -25,7 +25,7 @@ const Banner = () => {
         </p>
         <Link to="/register">
         <button className="btn-primary px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md">
-          Join Us
+          Get Started
         </button>
         </Link>
       </div>
