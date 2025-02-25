@@ -42,7 +42,7 @@ const BookCard = ({ book }) => {
           </p>
 
           {/* Genre Section */}
-          <p className="text-blue-500 text-xs sm:text-sm font-medium mb-1">
+          <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
             Genre: {book.genre}
           </p>
 
