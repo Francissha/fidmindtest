@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import InputField from '../addBook/InputField'
-import SelectField from '../addBook/SelectField'
+import React, { useEffect } from 'react';
+import InputField from '../addBook/InputField';
+import SelectField from '../addBook/SelectField';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
@@ -18,7 +18,7 @@ const UpdateBook = () => {
   useEffect(() => {
     if (bookData) {
       setValue('title', bookData.title);
-      setValue('author', bookData.author);  // <-- Added author
+      setValue('author', bookData.author);  
       setValue('description', bookData.description);
       setValue('category', bookData.category);
       setValue('trending', bookData.trending);
@@ -31,7 +31,7 @@ const UpdateBook = () => {
   const onSubmit = async (data) => {
     const updateBookData = {
       title: data.title,
-      author: data.author,  // <-- Included author
+      author: data.author,  
       description: data.description,
       category: data.category,
       trending: data.trending,
@@ -50,7 +50,7 @@ const UpdateBook = () => {
 
       Swal.fire({
         title: "Book Updated",
-        text: "Your book is updated successfully!",
+        text: "Your book has been updated successfully!",
         icon: "success",
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
@@ -59,19 +59,20 @@ const UpdateBook = () => {
 
       await refetch();
     } catch (error) {
-      console.log("Failed to update book.");
+      console.error("Failed to update book.", error);
       alert("Failed to update book.");
     }
   };
 
   if (isLoading) return <Loading />;
-  if (isError) return <div>Error fetching book data</div>;
+  if (isError) return <div className="text-red-500">Error fetching book data</div>;
 
   return (
     <div className="max-w-lg mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Update Book</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Title */}
         <InputField
           label="Title"
           name="title"
@@ -79,6 +80,7 @@ const UpdateBook = () => {
           register={register}
         />
 
+        {/* Author Field */}
         <InputField
           label="Author"
           name="author"
@@ -86,6 +88,7 @@ const UpdateBook = () => {
           register={register}
         />
 
+        {/* Description */}
         <InputField
           label="Description"
           name="description"
@@ -94,6 +97,7 @@ const UpdateBook = () => {
           register={register}
         />
 
+        {/* Category Selection */}
         <SelectField
           label="Category"
           name="category"
@@ -118,6 +122,7 @@ const UpdateBook = () => {
           register={register}
         />
 
+        {/* Trending Checkbox */}
         <div className="mb-4">
           <label className="inline-flex items-center">
             <input
@@ -129,6 +134,7 @@ const UpdateBook = () => {
           </label>
         </div>
 
+        {/* Old Price */}
         <InputField
           label="Old Price"
           name="oldPrice"
@@ -137,6 +143,7 @@ const UpdateBook = () => {
           register={register}
         />
 
+        {/* New Price */}
         <InputField
           label="New Price"
           name="newPrice"
@@ -145,6 +152,7 @@ const UpdateBook = () => {
           register={register}
         />
 
+        {/* Cover Image */}
         <InputField
           label="Cover Image URL"
           name="coverImage"
@@ -153,12 +161,13 @@ const UpdateBook = () => {
           register={register}
         />
 
+        {/* Submit Button */}
         <button type="submit" className="w-full py-2 bg-blue-500 text-white font-bold rounded-md">
           Update Book
         </button>
       </form>
     </div>
   );
-}
+};
 
 export default UpdateBook;
