@@ -29,18 +29,31 @@ const BookCard = ({ book }) => {
 
         {/* Details Section */}
         <div className="flex flex-col justify-between h-full w-full">
+          {/* Book Title */}
           <Link to={`/books/${book._id}`}>
             <h3 className="text-xs sm:text-sm font-semibold hover:text-blue-600 mb-1 leading-tight line-clamp-2">
               {book.title}
             </h3>
           </Link>
 
+          {/* Author Section */}
+          <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
+            Author: <span className="text-blue-600">{book.author}</span>
+          </p>
+
+          {/* Genre Section */}
+          <p className="text-blue-500 text-xs sm:text-sm font-medium mb-1">
+            Genre: {book.genre}
+          </p>
+
+          {/* Description */}
           <p className="text-gray-600 mb-2 text-xs sm:text-sm leading-snug line-clamp-2">
-            {book?.description.length > 50
-              ? `${book?.description.slice(0, 50)}...`
+            {book?.description.length > 80
+              ? `${book?.description.slice(0, 80)}...`
               : book.description}
           </p>
 
+          {/* Price */}
           <p className="font-medium mb-2 text-xs sm:text-sm">
             Ksh {book?.newPrice}{" "}
             <span className="line-through font-normal ml-2 text-gray-500 text-xs">
@@ -48,6 +61,7 @@ const BookCard = ({ book }) => {
             </span>
           </p>
 
+          {/* Add to Cart Button */}
           <button
             onClick={() => handleAddToCart(book)}
             className="btn-primary px-4 py-1 text-xs sm:text-sm flex items-center gap-1 justify-center"
@@ -63,3 +77,4 @@ const BookCard = ({ book }) => {
 };
 
 export default BookCard;
+
