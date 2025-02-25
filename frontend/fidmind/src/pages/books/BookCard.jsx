@@ -43,7 +43,7 @@ const BookCard = ({ book }) => {
 
           {/* Genre Section */}
           <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
-            Genre: {book.genre}
+            Genre: {book.category}
           </p>
 
           {/* Description */}
