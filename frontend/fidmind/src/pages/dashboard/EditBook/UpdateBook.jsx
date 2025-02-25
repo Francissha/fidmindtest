@@ -7,29 +7,31 @@ import Loading from '../../../components/Loading';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import getBaseUrl from '../../../utils/baseURL';
-import { useFetchBookByIdQuery, useUpdateBookMutation } from '../../../redux/books/booksApi';
+import { useFetchBookByIdQuery } from '../../../redux/books/booksApi';
 
 const UpdateBook = () => {
+  
   const { id } = useParams();
   const { data: bookData, isLoading, isError, refetch } = useFetchBookByIdQuery(id);
-  // console.log(bookData)
-  const [updateBook] = useUpdateBookMutation();
-  const { register, handleSubmit, setValue, reset } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
+  
   useEffect(() => {
     if (bookData) {
       setValue('title', bookData.title);
+      setValue('author', bookData.author);  // <-- Added author
       setValue('description', bookData.description);
-      setValue('category', bookData?.category);
+      setValue('category', bookData.category);
       setValue('trending', bookData.trending);
       setValue('oldPrice', bookData.oldPrice);
       setValue('newPrice', bookData.newPrice);
-      setValue('coverImage', bookData.coverImage)
+      setValue('coverImage', bookData.coverImage);
     }
-  }, [bookData, setValue])
+  }, [bookData, setValue]);
 
   const onSubmit = async (data) => {
     const updateBookData = {
       title: data.title,
+      author: data.author,  // <-- Included author
       description: data.description,
       category: data.category,
       trending: data.trending,
@@ -37,30 +39,34 @@ const UpdateBook = () => {
       newPrice: Number(data.newPrice),
       coverImage: data.coverImage || bookData.coverImage,
     };
+
     try {
       await axios.put(`${getBaseUrl()}/api/books/edit/${id}`, updateBookData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
-      })
+      });
+
       Swal.fire({
         title: "Book Updated",
         text: "Your book is updated successfully!",
         icon: "success",
-        showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, It's Okay!"
+        confirmButtonText: "OK"
       });
-      await refetch()
+
+      await refetch();
     } catch (error) {
       console.log("Failed to update book.");
       alert("Failed to update book.");
     }
-  }
-  if (isLoading) return <Loading />
-  if (isError) return <div>Error fetching book data</div>
+  };
+
+  if (isLoading) return <Loading />;
+  if (isError) return <div>Error fetching book data</div>;
+
   return (
     <div className="max-w-lg mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Update Book</h2>
@@ -70,6 +76,13 @@ const UpdateBook = () => {
           label="Title"
           name="title"
           placeholder="Enter book title"
+          register={register}
+        />
+
+        <InputField
+          label="Author"
+          name="author"
+          placeholder="Enter book author"
           register={register}
         />
 
@@ -84,28 +97,27 @@ const UpdateBook = () => {
         <SelectField
           label="Category"
           name="category"
-            options={[
+          options={[
             { value: '', label: 'Choose A Category' },
             { value: 'business', label: 'Business' },
             { value: 'technology', label: 'Technology' },
             { value: 'leadership', label: 'Leadership' },
             { value: 'biographies', label: 'Biographies' },
             { value: 'self-help', label: 'Self-Help' },
-             { value: 'religious', label: 'Religious' },
+            { value: 'religious', label: 'Religious' },
             { value: 'finance', label: 'Finance' },
             { value: 'romance', label: 'Romance' },
             { value: 'adventure', label: 'Adventure' },
-               { value: 'horror', label: 'Horror' },
+            { value: 'horror', label: 'Horror' },
             { value: 'thriller', label: 'Thriller' },
             { value: 'manga-japan', label: 'Manga-Japan' },
             { value: 'african', label: 'African' },
-                { value: 'masculinity', label: 'Masculinity' },
-               { value: 'feminine', label: 'Feminine' },
-        
-            // Add more options as needed
+            { value: 'masculinity', label: 'Masculinity' },
+            { value: 'feminine', label: 'Feminine' },
           ]}
           register={register}
         />
+
         <div className="mb-4">
           <label className="inline-flex items-center">
             <input
@@ -146,7 +158,7 @@ const UpdateBook = () => {
         </button>
       </form>
     </div>
-  )
+  );
 }
 
-export default UpdateBook
+export default UpdateBook;
