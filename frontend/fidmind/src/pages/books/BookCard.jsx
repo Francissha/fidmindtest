@@ -36,10 +36,10 @@ const BookCard = ({ book }) => {
             </h3>
           </Link>
 
-          {/* Author Section */}
-          <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
+          {/* Author Section  <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
             Author: <span className="text-blue-600">{book.author}</span>
-          </p>
+          </p>*/}
+         
 
           {/* Genre Section */}
           <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
