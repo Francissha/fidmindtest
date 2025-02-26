@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import { Link, useNavigate} from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
+
 import Swal from 'sweetalert2';
 import { useCreateOrderMutation } from '../../redux/features/orders/ordersApi';
 
@@ -14,6 +15,7 @@ const CheckoutPage = () => {
     const { currentUser } = useAuth()
     const {
         register,
+        
         handleSubmit,
         watch,
         formState: { errors },
@@ -23,40 +25,40 @@ const CheckoutPage = () => {
     const navigate = useNavigate();
 
     const [isChecked, setIsChecked] = useState(false)
-    const newOrder = {
-        name: data.name,
-        email: currentUser?.email,
-        address: {
-            city: data.city,
-            country: data.country,
-            state: data.state,
-            zipcode: data.zipcode
-        },
-        phone: data.phone,
-        orderDetails: cartItems.map(item => ({
-            bookId: item._id,
-            title: item.title,
-            quantity: item.quantity,
-            price: item.newPrice
-        })),
-        totalPrice: totalPrice,
-    };
+    const onSubmit = async(data) => {
+        console.log(data) 
 
-    try {
-        await createOrder(newOrder).unwrap();
-        Swal.fire({
-            title: "Confirmed Order",
-            text: "Your order was placed successfully!",
-            icon: "success",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "Okay"
-        });
-        navigate("/orders");
-    } catch (error) {
-        console.error("Error placing order", error);
-        alert("Failed to place an order");
+    const newOrder = {
+            name: data.name,
+            email: currentUser?.email,
+            address: {
+                city: data.city,
+                country: data.country,
+                district: data.district,
+                   
+            },
+
+            phone: data.phone,
+            productIds: cartItems.map(item => item?._id),
+            totalPrice: totalPrice,
+        }
+       try {
+            await createOrder(newOrder).unwrap();
+            Swal.fire({
+                title: "Confirmed Order",
+                text: "Your order placed successfully!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, It's Okay!"
+              });
+              navigate("/orders")
+        } catch (error) {
+            console.error("Error place an order", error);
+            alert("Failed to place an order")
+        }
     }
-};
     if(isLoading) return<div>Loading..</div>
     return (
         <section>
@@ -153,6 +155,7 @@ const CheckoutPage = () => {
                                                 </div>
                                             </div>
 
+
                                              <div className="md:col-span-5 mt-4">
                                             <p className="font-medium text-lg">Order Details</p>
                                             {cartItems.map(item => (
@@ -178,9 +181,7 @@ const CheckoutPage = () => {
                                                 </div>
                                             </div>
 
-
-
-                                            <div className="md:col-span-5 text-right">
+                                        <div className="md:col-span-5 text-right">
                                                 <div className="inline-flex items-end">
                                                  
                                                     <button
