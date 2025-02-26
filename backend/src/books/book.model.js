@@ -1,48 +1,53 @@
 const { mongoose } = require("mongoose");
 
-const bookSchema = new mongoose.Schema({
-    title: {
+const orderSchema = new mongoose.Schema({
+    name: { 
         type: String,
         required: true,
     },
-    author: {  
+    email: {
         type: String,
         required: true,
     },
-    description: {
-        type: String,
-        required: true,
+    address: {
+        city: {
+            type: String,
+            required: true,
+        },
+        country: String,
+        state: String,
+        zipcode: String,
     },
-    category: {
-        type: String,
-        required: true,
-    },
-    trending: {
-        type: Boolean,
-        default: true,
-    },
-    coverImage: {
-        type: String,
-        required: true,
-    },
-    oldPrice: {
+    phone: {
         type: Number,
         required: true,
     },
-    newPrice: {
+    orderDetails: [  // <-- Added to store details of ordered books
+        {
+            bookId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Book',
+                required: true
+            },
+            title: String,  // <-- Store book title for quick reference
+            quantity: {
+                type: Number,
+                required: true
+            },
+            price: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
+    totalPrice: {
         type: Number,
         required: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
     }
-},
-{
+}, {
     timestamps: true,
 });
 
-const Book = mongoose.model('Book', bookSchema);
+const Order = mongoose.model('Order', orderSchema);
 
-module.exports = Book;
-
+module.exports = Order;
