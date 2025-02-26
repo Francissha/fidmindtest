@@ -1,4 +1,4 @@
-const { mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
     name: { 
@@ -22,14 +22,14 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    orderDetails: [  // <-- Added to store details of ordered books
+    orderDetails: [  
         {
             bookId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Book',
                 required: true
             },
-            title: String,  // <-- Store book title for quick reference
+            title: String,
             quantity: {
                 type: Number,
                 required: true
@@ -48,6 +48,7 @@ const orderSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const Order = mongoose.model('Order', orderSchema);
+// Fix: Check if the model already exists before defining it
+const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);
 
 module.exports = Order;
