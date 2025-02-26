@@ -29,19 +29,23 @@ const CheckoutPage = () => {
         console.log(data) 
 
     const newOrder = {
-            name: data.name,
-            email: currentUser?.email,
-            address: {
-                city: data.city,
-                country: data.country,
-                district: data.district,
-                   
-            },
+    name: data.name,
+    email: currentUser?.email,
+    address: {
+        city: data.city,
+        country: data.country,
+        district: data.district,
+    },
+    phone: data.phone,
+    products: cartItems.map(item => ({
+        id: item._id,
+        title: item.title,  // Include book title
+        quantity: item.quantity,
+        price: item.newPrice * item.quantity,
+    })),
+    totalPrice: totalPrice,
+};
 
-            phone: data.phone,
-            productIds: cartItems.map(item => item?._id),
-            totalPrice: totalPrice,
-        }
        try {
             await createOrder(newOrder).unwrap();
             Swal.fire({
@@ -156,18 +160,46 @@ const CheckoutPage = () => {
                                             </div>
 
 
-                                             <div className="md:col-span-5 mt-4">
+                                            <div className="md:col-span-5 mt-4">
                                             <p className="font-medium text-lg">Order Details</p>
-                                            {cartItems.map(item => (
-                                                <div key={item._id} className="flex items-center justify-between mb-4">
-                                                    <div className="flex items-center">
-                                                      
-                                                        <div>
-                                                            <p className="font-medium">{item.title}</p>
-                                                            <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
-                                                        </div>
-                                                    </div>
-                                                    <p className="text-gray-700">ksh {item.newPrice * item.quantity}</p>
+                                            
+                                            {cartItems.map((item, index) => (
+                                                <div key={item._id} className="mb-4">
+                                                    <label htmlFor={`product_${index}`} className="block text-sm font-medium text-gray-700">
+                                                        Book Title
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        id={`product_${index}`}
+                                                        name={`product_${index}`}
+                                                        value={item.title}
+                                                        readOnly
+                                                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                                                    />
+                                        
+                                                    <label htmlFor={`quantity_${index}`} className="block text-sm font-medium text-gray-700 mt-2">
+                                                        Quantity
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        id={`quantity_${index}`}
+                                                        name={`quantity_${index}`}
+                                                        value={item.quantity}
+                                                        readOnly
+                                                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                                                    />
+                                        
+                                                    <label htmlFor={`price_${index}`} className="block text-sm font-medium text-gray-700 mt-2">
+                                                        Price
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        id={`price_${index}`}
+                                                        name={`price_${index}`}
+                                                        value={`Ksh ${item.newPrice * item.quantity}`}
+                                                        readOnly
+                                                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                                                    />
                                                 </div>
                                             ))}
                                         </div>
