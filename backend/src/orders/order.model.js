@@ -5,49 +5,39 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+
     email: {
-        type: String,
+        type:String,
         required: true,
     },
     address: {
-        city: {
-            type: String,
-            required: true,
-        },
-        country: String,
-        state: String,
-        zipcode: String,
-    },
-    phone: {
-        type: Number,
+        city:{
+        type: String,
         required: true,
     },
-    orderDetails: [  
+    country: String,
+    state: String,
+    zipcode: String,
+    },
+    phone: {
+        type : Number,
+        required:true,
+},
+    productIds:[
         {
-            bookId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Book',
-                required: true
-            },
-            title: String, 
-            quantity: {
-                type: Number,
-                required: true
-            },
-            price: {
-                type: Number,
-                required: true
-            }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book',
         }
     ],
     totalPrice: {
         type: Number,
         required: true,
     }
-}, {
-    timestamps: true,
-});
+    },
+    {
+        timestamps: true,
+})
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model('Order',orderSchema)
 
 module.exports = Order;
