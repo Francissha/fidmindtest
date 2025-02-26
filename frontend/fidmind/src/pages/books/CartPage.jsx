@@ -1,79 +1,136 @@
+
 import React from 'react';
-import { FiShoppingCart } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getImgUrl } from '../../utils/getImgUrl';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/features/cart/cartSlice';
+import { clearCart, removeFromCart, updateQuantity } from '../../redux/features/cart/cartSlice';
 
-const BookCard = ({ book }) => {
-  const dispatch = useDispatch();
+const CartPage = () => {
+    const cartItems = useSelector(state => state.cart.cartItems);
+    const dispatch = useDispatch();
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-  };
+    const totalPrice = cartItems
+        .reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
+        .toFixed(2);
 
-  return (
-    <div className="rounded-lg transition-shadow duration-300 h-full flex flex-col border p-3 shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:h-full sm:justify-center gap-3">
+    const handleRemoveFromCart = (product) => {
+        dispatch(removeFromCart(product));
+    };
 
-        {/* Image Section */}
-        <div className="sm:h-64 h-48 w-full sm:w-40 flex-shrink-0 border rounded-md overflow-hidden">
-          <Link to={`/books/${book._id}`}>
-            <img
-              src={`${getImgUrl(book?.coverImage)}`}
-              alt={book.title}
-              className="w-full h-full object-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
-            />
-          </Link>
-        </div>
+    const handleClearCart = () => {
+        dispatch(clearCart());
+    };
 
-        {/* Details Section */}
-        <div className="flex flex-col justify-between h-full w-full">
-          {/* Book Title */}
-          <Link to={`/books/${book._id}`}>
-            <h3 className="text-xs sm:text-sm font-semibold hover:text-blue-600 mb-1 leading-tight line-clamp-2">
-              {book.title}
-            </h3>
-          </Link>
+    //Shows quantity as a drop down list
+    const handleQuantityChange = (product, newQuantity) => {
+        if (newQuantity >= 1) {
+            dispatch(updateQuantity({ _id: product._id, quantity: newQuantity }));
+        }
+    };
 
-          {/* Author Section 
-          <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
-            Author: <span className="text-blue-600">{book.author}</span>
-          </p>*/}
-          
-          {/* Genre Section */}
-          <p className="text-gray-700 text-xs sm:text-sm font-medium mb-1">
-            Genre: {book.category}
-          </p>
+    return (
+        <>
+            <div className="flex mt-12 h-full flex-col overflow-hidden bg-white shadow-xl">
+                <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                    <div className="flex items-start justify-between">
+                        <div className="text-lg font-medium text-gray-900">Shopping cart</div>
+                        <div className="ml-3 flex h-7 items-center">
+                            <button
+                                type="button"
+                                onClick={handleClearCart}
+                                className="relative -m-2 py-1 px-2 bg-red-500 text-white rounded-md hover:bg-secondary transition-all duration-200"
+                            >
+                                <span>Clear Cart</span>
+                            </button>
+                        </div>
+                    </div>
 
-          {/* Description */}
-          <p className="text-gray-600 mb-2 text-xs sm:text-sm leading-snug line-clamp-2">
-            {book?.description.length > 80
-              ? `${book?.description.slice(0, 80)}...`
-              : book.description}
-          </p>
+                    <div className="mt-8">
+                        <div className="flow-root">
+                            {cartItems.length > 0 ? (
+                                <ul role="list" className="-my-6 divide-y divide-gray-200">
+                                    {cartItems.map((product) => (
+                                        <li key={product?._id} className="flex py-6">
+                                            <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                                <img
+                                                    alt=""
+                                                    src={`${getImgUrl(product?.coverImage)}`}
+                                                    className="h-full w-full object-cover object-center"
+                                                />
+                                            </div>
 
-          {/* Price */}
-          <p className="font-medium mb-2 text-xs sm:text-sm">
-            Ksh {book?.newPrice}{" "}
-            <span className="line-through font-normal ml-2 text-gray-500 text-xs">
-              Ksh {book?.oldPrice}
-            </span>
-          </p>
+                                            <div className="ml-4 flex flex-1 flex-col">
+                                                <div>
+                                                    <div className="flex flex-wrap justify-between text-base font-medium text-gray-900">
+                                                        <h3>
+                                                            <Link to='/'>{product?.title}</Link>
+                                                        </h3>
+                                                        <p className="sm:ml-4">ksh {product?.newPrice}</p>
+                                                    </div>
+                                                    <p className="mt-1 text-sm text-gray-500 capitalize"><strong>Category: </strong>{product?.category}</p>
+                                                </div>
+                                                <div className="flex flex-1 flex-wrap items-end justify-between space-y-2 text-sm">
+                                                    <div className="flex items-center space-x-2">
+                                                        <strong>Qty:</strong>
+                                                        <input
+                                                            type="number"
+                                                            min="1"
+                                                            value={product.quantity}
+                                                            onChange={(e) => handleQuantityChange(product, parseInt(e.target.value))}
+                                                            className="w-16 border px-2 py-1 rounded"
+                                                        />
+                                                    </div>
 
-          {/* Add to Cart Button */}
-          <button
-            onClick={() => handleAddToCart(book)}
-            className="btn-primary px-4 py-1 text-xs sm:text-sm flex items-center gap-1 justify-center"
-          >
-            <FiShoppingCart />
-            <span>Add to Cart</span>
-          </button>
-        </div>
+                                                    <button
+                                                        onClick={() => handleRemoveFromCart(product)}
+                                                        type="button"
+                                                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No product found!</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+                
 
-      </div>
-    </div>
-  );
+                <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                    <div className="flex justify-between text-base font-medium text-gray-900">
+                        <p>Subtotal</p>
+                        <p>ksh {totalPrice ? totalPrice : 0}</p>
+                    </div>
+                    <p className="mt-0.5 text-sm text-gray-00">NOTE: Shipping costs are confirmed by our agents once order is placed.</p>
+                    <div className="mt-6">
+                        <Link
+                            to="/checkout"
+                            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        >
+                            Checkout
+                        </Link>
+                    </div>
+                    <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
+                        <Link to="/">
+                            or
+                            <button
+                                type="button"
+                                className="font-medium text-indigo-600 hover:text-indigo-500 ml-1"
+                            >
+                                Continue Shopping
+                                <span aria-hidden="true"> &rarr;</span>
+                            </button>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 };
 
-export default BookCard;
+export default CartPage;
