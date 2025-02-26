@@ -1,19 +1,17 @@
-
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getImgUrl } from '../../utils/getImgUrl';
-import { clearCart, removeFromCart, updateQuantity } from '../../redux/features/cart/cartSlice';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getImgUrl } from "../../utils/getImgUrl";
+import { clearCart, removeFromCart, updateQuantity } from "../../redux/features/cart/cartSlice";
 
 const CartPage = () => {
-    const cartItems = useSelector(state => state.cart.cartItems);
+    const cartItems = useSelector(state => state.cart?.cartItems || []); // Ensure it's an array
     const dispatch = useDispatch();
 
-    const totalPrice = cartItems
-        .reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
-        .toFixed(2);
+    const totalPrice = cartItems.reduce((acc, item) => acc + (item?.newPrice || 0) * (item?.quantity || 1), 0).toFixed(2);
 
     const handleRemoveFromCart = (product) => {
+        if (!product || !product._id) return;
         dispatch(removeFromCart(product));
     };
 
@@ -21,11 +19,9 @@ const CartPage = () => {
         dispatch(clearCart());
     };
 
-    //Shows quantity as a drop down list
     const handleQuantityChange = (product, newQuantity) => {
-        if (newQuantity >= 1) {
-            dispatch(updateQuantity({ _id: product._id, quantity: newQuantity }));
-        }
+        if (!product || !product._id || newQuantity < 1) return;
+        dispatch(updateQuantity({ _id: product._id, quantity: newQuantity }));
     };
 
     return (
@@ -50,11 +46,11 @@ const CartPage = () => {
                             {cartItems.length > 0 ? (
                                 <ul role="list" className="-my-6 divide-y divide-gray-200">
                                     {cartItems.map((product) => (
-                                        <li key={product?._id} className="flex py-6">
+                                        <li key={product?._id || Math.random()} className="flex py-6">
                                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                 <img
-                                                    alt=""
-                                                    src={`${getImgUrl(product?.coverImage)}`}
+                                                    alt={product?.title || "Book Cover"}
+                                                    src={product?.coverImage ? getImgUrl(product.coverImage) : "/images/fallback-book.jpg"}
                                                     className="h-full w-full object-cover object-center"
                                                 />
                                             </div>
@@ -63,11 +59,16 @@ const CartPage = () => {
                                                 <div>
                                                     <div className="flex flex-wrap justify-between text-base font-medium text-gray-900">
                                                         <h3>
-                                                            <Link to='/'>{product?.title}</Link>
+                                                            <Link to={product?._id ? `/books/${product._id}` : "#"}>
+                                                                {product?.title || "Untitled"}
+                                                            </Link>
                                                         </h3>
-                                                        <p className="sm:ml-4">ksh {product?.newPrice}</p>
+                                                        <p className="sm:ml-4">Ksh {product?.newPrice || "0.00"}</p>
                                                     </div>
-                                                    <p className="mt-1 text-sm text-gray-500 capitalize"><strong>Category: </strong>{product?.category}</p>
+                                                    <p className="mt-1 text-sm text-gray-500 capitalize">
+                                                        <strong>Category: </strong>
+                                                        {product?.category || "Unknown"}
+                                                    </p>
                                                 </div>
                                                 <div className="flex flex-1 flex-wrap items-end justify-between space-y-2 text-sm">
                                                     <div className="flex items-center space-x-2">
@@ -75,7 +76,7 @@ const CartPage = () => {
                                                         <input
                                                             type="number"
                                                             min="1"
-                                                            value={product.quantity}
+                                                            value={product?.quantity || 1}
                                                             onChange={(e) => handleQuantityChange(product, parseInt(e.target.value))}
                                                             className="w-16 border px-2 py-1 rounded"
                                                         />
@@ -99,14 +100,15 @@ const CartPage = () => {
                         </div>
                     </div>
                 </div>
-                
 
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>ksh {totalPrice ? totalPrice : 0}</p>
+                        <p>Ksh {totalPrice || "0.00"}</p>
                     </div>
-                    <p className="mt-0.5 text-sm text-gray-00">NOTE: Shipping costs are confirmed by our agents once order is placed.</p>
+                    <p className="mt-0.5 text-sm text-gray-00">
+                        NOTE: Shipping costs are confirmed by our agents once the order is placed.
+                    </p>
                     <div className="mt-6">
                         <Link
                             to="/checkout"
@@ -134,3 +136,4 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
