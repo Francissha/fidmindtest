@@ -158,51 +158,25 @@ const CheckoutPage = () => {
                                                     </button>
                                                 </div>
                                             </div>
-
-
-                                            <div className="md:col-span-5 mt-4">
-                                            <p className="font-medium text-lg">Order Details</p>
-                                            
-                                            {cartItems.map((item, index) => (
-                                                <div key={item._id} className="mb-4">
-                                                    <label htmlFor={`product_${index}`} className="block text-sm font-medium text-gray-700">
-                                                        Book Title
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id={`product_${index}`}
-                                                        name={`product_${index}`}
-                                                        value={item.title}
-                                                        readOnly
-                                                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                                                    />
+                                    
+                                    <div className="md:col-span-5 mt-4">
+                                        <p className="font-medium text-lg mb-2">Order Details</p>
                                         
-                                                    <label htmlFor={`quantity_${index}`} className="block text-sm font-medium text-gray-700 mt-2">
-                                                        Quantity
-                                                    </label>
-                                                    <input
-                                                        type="number"
-                                                        id={`quantity_${index}`}
-                                                        name={`quantity_${index}`}
-                                                        value={item.quantity}
-                                                        readOnly
-                                                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                                                    />
-                                        
-                                                    <label htmlFor={`price_${index}`} className="block text-sm font-medium text-gray-700 mt-2">
-                                                        Price
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        id={`price_${index}`}
-                                                        name={`price_${index}`}
-                                                        value={`Ksh ${item.newPrice * item.quantity}`}
-                                                        readOnly
-                                                        className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                                                    />
-                                                </div>
-                                            ))}
+                                        <div className="flex justify-between font-semibold text-gray-700 bg-gray-200 p-2 rounded">
+                                            <span className="w-1/2">Book Title</span>
+                                            <span className="w-1/4 text-center">Quantity</span>
+                                            <span className="w-1/4 text-right">Price</span>
                                         </div>
+                                    
+                                        {cartItems.map((item, index) => (
+                                            <div key={item._id} className="flex justify-between border-b p-2 items-center">
+                                                <span className="w-1/2 truncate">{item.title}</span>
+                                                <span className="w-1/4 text-center">{item.quantity}</span>
+                                                <span className="w-1/4 text-right">Ksh {item.newPrice * item.quantity}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
 
                                             <div className="md:col-span-5 mt-3">
                                                 <div className="inline-flex items-center">
