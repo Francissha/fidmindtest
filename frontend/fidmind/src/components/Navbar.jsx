@@ -119,7 +119,7 @@ const Navbar = () => {
 
           <button onClick={toggleTheme}
                 className="p-1 bg-blue-500 text-white rounded">
-                {theme === "light" ? "Dark 🌙" : "Light ☀️"}
+                {theme === "light" ? "🌙" : "☀️"}
             </button>
 
           <Link to="/cart" className="bg-primary p-1 sm:px-6 px-2 flex items-center rounded-sm ml-4 sm:ml-6">
