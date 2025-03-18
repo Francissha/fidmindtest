@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['https://fidmindbookstoreke.onrender.com', 'http://localhost:5173'], // Add frontend URL
+  origin: ['https://xyztest-1.onrender.com', 'http://localhost:5173'], // Add frontend URL
   credentials: true
 }));
 
@@ -37,7 +37,7 @@ app.use('/api/admin', adminRoutes);
 app.use("/api/mpesa", mpesaRoutes);
 
 // Serve Static Files (Images)
-app.use('/uploads', express.static('uploads')); // Ensure image storage path is correct
+app.use('/uploads', express.static('uploads')); 
 
 // Default Route
 app.get("/", (req, res) => {
