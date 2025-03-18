@@ -35,7 +35,7 @@ const Navbar = () => {
     if (query.trim() === "") return;  
 
     try {
-      const response = await axios.get(`https://fidmindbookstore.onrender.com/api/books?query=${query}`);
+      const response = await axios.get(`https://xyztest.onrender.com/api/books?query=${query}`);
       
       if (response.data.length === 0) {
         setNoResults(true);
