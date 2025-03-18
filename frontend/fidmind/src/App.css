@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+/* Swiper Styles */
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+  
+.swiper-slide {
+    @apply bg-white dark:bg-gray-900 flex justify-center items-center;
+}
+
+.swiper-slide img {
+    @apply block w-full h-full object-cover;
+}
+
+/* Swiper Navigation Arrows for Large Devices */
+.swiper-button-prev, .swiper-button-next {
+    @apply bg-white dark:bg-gray-800 p-5 rounded-full z-50 shadow-md hidden md:block;
+}
+
+/* Styling for arrows */
+.swiper-button-prev:after, .swiper-button-next:after {
+    font-size: 16px !important;
+}
+
+/* Button Primary */
+.btn-primary {
+    @apply bg-primary px-6 py-2 rounded-md text-base font-secondary font-bold 
+           hover:bg-secondary hover:text-white transition-all duration-200 cursor-pointer;
+}
+
+/* Enable smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Default Light Theme */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+}
+
+/* Dark Mode Variables */
+.dark {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+}
+
+/* Apply Theme */
+body {
+    @apply bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300;
+}
+
+/* Global Dark Mode Overrides */
+.bg-white {
+    @apply dark:bg-gray-900;
+}
+
+.text-black {
+    @apply dark:text-white;
+}
+
+/* 🛠️ Fixing Gray Text Visibility in Dark Mode */
+.text-gray-500 {
+    @apply dark:text-gray-300; /* Light gray becomes visible */
+}
+
+.text-gray-600 {
+    @apply dark:text-gray-300;
+}
+
+.text-gray-700 {
+    @apply dark:text-gray-300;
+}
+
+.text-gray-800 {
+    @apply dark:text-gray-200;
+}
+
+.text-gray-900 {
+    @apply dark:text-gray-100;
+}
+
+/* Background Colors */
+.bg-gray-100 {
+    @apply dark:bg-gray-800;
+}
+
+.bg-gray-200 {
+    @apply dark:bg-gray-700;
+}
+/* 🌙 Dark Mode Fix for Dropdowns & Input Fields */
+input, select, textarea {
+    @apply bg-white text-black dark:bg-gray-800 dark:text-white border dark:border-gray-600 
+           focus:ring focus:ring-primary focus:outline-none;
+}
+
+/* Placeholder Text Visibility */
+::placeholder {
+    @apply text-gray-500 dark:text-gray-400;
+}
+
+/* Dropdowns */
+select {
+    @apply bg-white dark:bg-gray-800 text-black dark:text-white border dark:border-gray-600;
+}
+
+/* Fixing Dropdown Options */
+option {
+    @apply bg-white dark:bg-gray-800 text-black dark:text-white;
+}
+
+/* Fixing Checkboxes and Radio Buttons */
+input[type="checkbox"], input[type="radio"] {
+    @apply bg-white dark:bg-gray-800 border dark:border-gray-600;
+}
