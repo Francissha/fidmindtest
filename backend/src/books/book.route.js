@@ -1,5 +1,6 @@
-const express = require('express');
-const { postABook, getAllBooks, getSingleBook, UpdateBook, deleteABook } = require('./book.controller');
+import express from "express";
+import { postABook, getAllBooks, getSingleBook, UpdateBook, deleteABook } from "./book.controller.js";
+
 const router = express.Router();
 
 // POST a book
@@ -17,4 +18,6 @@ router.put("/edit/:id", UpdateBook);
 // DELETE a book
 router.delete("/:id", deleteABook);
 
-module.exports = router;
+// ✅ Use ES Module export
+export default router;
+

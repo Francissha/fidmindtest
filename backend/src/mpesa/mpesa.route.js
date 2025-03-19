@@ -1,9 +1,10 @@
-const express = require("express");
-const { orderBooks } = require("./mpesa.controller.js");
+import express from "express";
+import { orderBooks } from "./mpesa.controller.js"; // Use `import` instead of `require`
 
 const router = express.Router();
 
 // Create order endpoint
 router.post("/buyBook", orderBooks);
 
-module.exports = router;
+export default router; // Export as default
+

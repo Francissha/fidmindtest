@@ -1,6 +1,9 @@
+import  MpesaTransaction from "./mpesa.model.js";
+import axios from "axios"
+import dotenv from "dotenv"
 
-const axios = require("axios");
-const dotenv = require("dotenv");
+//const axios = require("axios");
+//const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -31,7 +34,7 @@ const getAccessToken = async () => {
 	}
 };
 
-const orderBooks = async (req, res) => {
+export const orderBooks = async (req, res) => {
 	const { phoneNumber, amount } = req.body;
 
 	if (!phoneNumber || !amount) {
@@ -80,4 +83,5 @@ const orderBooks = async (req, res) => {
 	}
 };
 
-module.exports = { orderBooks };
+
+export default orderBooks ;

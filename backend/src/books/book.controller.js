@@ -1,6 +1,8 @@
-const Book = require("./book.model");
+//const Book = require("./book.model");
 
-const postABook = async (req, res) => {
+import  Book  from "./book.model.js";
+
+export const  postABook = async (req, res) => {
     try {
         const newBook = await Book({...req.body});
         await newBook.save();
@@ -12,7 +14,7 @@ const postABook = async (req, res) => {
 }
 
 // Get all books or filter by search query
-const getAllBooks = async (req, res) => {
+export const getAllBooks = async (req, res) => {
     try {
         const { query } = req.query;  // Get search query from request parameters
         const filter = query
@@ -33,7 +35,7 @@ const getAllBooks = async (req, res) => {
     }
 }
 
-const getSingleBook = async (req, res) => {
+export const getSingleBook = async (req, res) => {
     try {
         const { id } = req.params;
         const book = await Book.findById(id);
@@ -47,7 +49,7 @@ const getSingleBook = async (req, res) => {
     }
 }
 
-const UpdateBook = async (req, res) => {
+export const UpdateBook = async (req, res) => {
     try {
         const { id } = req.params;
         const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true });
@@ -61,7 +63,7 @@ const UpdateBook = async (req, res) => {
     }
 }
 
-const deleteABook = async (req, res) => {
+export const deleteABook = async (req, res) => {
     try {
         const { id } = req.params;
         const deletedBook = await Book.findByIdAndDelete(id);
@@ -75,10 +77,10 @@ const deleteABook = async (req, res) => {
     }
 }
 
-module.exports = {
-    postABook,
-    getAllBooks,
-    getSingleBook,
-    UpdateBook,
-    deleteABook
-}
+//module.exports = {
+//    postABook,
+//    getAllBooks,
+//    getSingleBook,
+//    UpdateBook,
+//    deleteABook
+//}
