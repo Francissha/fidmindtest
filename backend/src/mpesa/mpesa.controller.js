@@ -83,5 +83,43 @@ export const orderBooks = async (req, res) => {
 	}
 };
 
+export const stkCallback = async (req, res) => {
+  try {
+    console.log("STK Callback Received:", req.body);
 
-export default orderBooks ;
+    const { Body } = req.body;
+    if (!Body || !Body.stkCallback || !Body.stkCallback.CheckoutRequestID) {
+      return res.status(400).json({ success: false, message: "Invalid callback data" });
+    }
+
+    const { ResultCode, CheckoutRequestID, ResultDesc } = Body.stkCallback;
+
+    // Find the transaction using the CheckoutRequestID
+    const transaction = await MpesaTransaction.findOne({ checkoutRequestId: CheckoutRequestID });
+
+    if (!transaction) {
+        console.warn("Transaction not found for CheckoutRequestID:", CheckoutRequestID);
+        return res.status(404).json({ success: false, message: "Transaction not found" });
+    }
+
+    // Update status based on ResultCode
+    transaction.status = ResultCode === 0 ? "SUCCESS" : "FAILED";
+    transaction.resultCode = ResultCode;
+    transaction.resultDesc = ResultDesc;
+    transaction.responsePayload = Body;
+
+    // If payment was successful, store additional details
+    if (ResultCode === 0 && Body.stkCallback.CallbackMetadata) {
+      transaction.paymentDetails = Body.stkCallback.CallbackMetadata;
+    }
+
+    // Save the updated transaction
+    await transaction.save();
+
+    return res.status(200).json({ success: true, message: "Transaction updated" });
+  } catch (error) {
+    console.error("STK Callback Error:", error.message);
+    return res.status(500).json({ success: false, message: "Callback processing failed" });
+  }
+};
+
