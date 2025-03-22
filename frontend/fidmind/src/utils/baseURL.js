@@ -1,5 +1,5 @@
 const getBaseUrl = () => {
-  return 'https://fidmindbookstore.onrender.com';  // Production URL
+  return 'https://xyztest-1.onrender.com';  // Production URL
 }
 
 export default getBaseUrl;
