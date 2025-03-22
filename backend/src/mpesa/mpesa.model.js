@@ -12,9 +12,11 @@ const mpesaTransactionSchema = new mongoose.Schema({
   },
   resultCode: { type: String }, // API response code
   createdAt: { type: String },
+  merchantRequestId: { type: String, unique: true, sparse: true },
+  checkoutRequestId: { type: String, unique: true, required: true },
 });
 
-mpesaTransactionSchema.pre("save", function (next) {
+mpesaTransactionSchema.pre("save", function(next) {
   const date = new Date();
   this.createdAt = date.toLocaleString("en-KE", { timeZone: "Africa/Nairobi" });
   next();

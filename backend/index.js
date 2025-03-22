@@ -44,15 +44,15 @@ app.get("/", (req, res) => {
   res.send("Book Store Server is running!");
 });
 
-//app.post('/callback', (req, res) => {
-//  const callbackData = req.body;
-//
-//  // Log the callback data to the console
-//  console.log(callbackData);
-//
-//  // Send a response back to the M-Pesa
-//  res.json({ status: 'success' });
-//});
+app.post('/callback', (req, res) => {
+  const callbackData = req.body;
+
+  // Log the callback data to the console
+  console.log(callbackData);
+
+  // Send a response back to the M-Pesa
+  res.json({ status: 'success' });
+});
 
 // Start Server
 app.listen(port, () => {

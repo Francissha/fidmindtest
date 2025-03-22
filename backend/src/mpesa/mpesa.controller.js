@@ -1,4 +1,4 @@
-import  MpesaTransaction from "./mpesa.model.js";
+import MpesaTransaction from "./mpesa.model.js";
 import axios from "axios"
 import dotenv from "dotenv"
 
@@ -76,7 +76,34 @@ export const orderBooks = async (req, res) => {
 			}
 		);
 
-		res.json(response.data);
+		if (!response.data.CheckoutRequestID) {
+			return res.status(500).json({ success: false, message: "STK Push failed. No CheckoutRequestID received." });
+		}
+
+		console.log("STK Push Response:", response.data);
+
+		const { CheckoutRequestID, MerchantRequestID } = response.data;
+
+		const checkoutID = CheckoutRequestID
+		const merchantID = MerchantRequestID
+
+
+		console.log(checkoutID)
+
+
+		// Save transaction details
+		await MpesaTransaction.create({
+			phoneNumber: phoneNumber,
+			amount,
+			status: "PENDING",
+			//reference,
+			checkoutRequestId: checkoutID,
+			merchantRequestId: merchantID,
+			responsePayload: response.data,
+		});
+
+		// Send response to client immediately
+		res.json({ success: true, data: response.data });
 	} catch (error) {
 		console.error("STK Push Error:", error.response?.data || error.message);
 		res.status(500).json({ error: "Failed to process STK Push" });
@@ -84,42 +111,43 @@ export const orderBooks = async (req, res) => {
 };
 
 export const stkCallback = async (req, res) => {
-  try {
-    console.log("STK Callback Received:", req.body);
+	try {
+		console.log("STK Callback Received:", req.body);
 
-    const { Body } = req.body;
-    if (!Body || !Body.stkCallback || !Body.stkCallback.CheckoutRequestID) {
-      return res.status(400).json({ success: false, message: "Invalid callback data" });
-    }
+		const { Body } = req.body;
+		if (!Body || !Body.stkCallback || !Body.stkCallback.CheckoutRequestID) {
+			return res.status(400).json({ success: false, message: "Invalid callback data" });
+		}
 
-    const { ResultCode, CheckoutRequestID, ResultDesc } = Body.stkCallback;
+		const { ResultCode, CheckoutRequestID, ResultDesc } = Body.stkCallback;
+		console.log("stk:", CheckoutRequestID)
 
-    // Find the transaction using the CheckoutRequestID
-    const transaction = await MpesaTransaction.findOne({ checkoutRequestId: CheckoutRequestID });
+		// Find the transaction using the CheckoutRequestID
+		const transaction = await MpesaTransaction.findOne({ checkoutRequestId: CheckoutRequestID });
 
-    if (!transaction) {
-        console.warn("Transaction not found for CheckoutRequestID:", CheckoutRequestID);
-        return res.status(404).json({ success: false, message: "Transaction not found" });
-    }
+		if (!transaction) {
+			console.warn("Transaction not found for CheckoutRequestID:", CheckoutRequestID);
+			return res.status(404).json({ success: false, message: "Transaction not found" });
+		}
 
-    // Update status based on ResultCode
-    transaction.status = ResultCode === 0 ? "SUCCESS" : "FAILED";
-    transaction.resultCode = ResultCode;
-    transaction.resultDesc = ResultDesc;
-    transaction.responsePayload = Body;
+		// Update status based on ResultCode
+		transaction.status = ResultCode === 0 ? "SUCCESS" : "FAILED";
+		transaction.resultCode = ResultCode;
+		transaction.resultDesc = ResultDesc;
+		transaction.responsePayload = Body;
 
-    // If payment was successful, store additional details
-    if (ResultCode === 0 && Body.stkCallback.CallbackMetadata) {
-      transaction.paymentDetails = Body.stkCallback.CallbackMetadata;
-    }
+		// If payment was successful, store additional details
+		if (ResultCode === 0 && Body.stkCallback.CallbackMetadata) {
+			transaction.paymentDetails = Body.stkCallback.CallbackMetadata;
+		}
 
-    // Save the updated transaction
-    await transaction.save();
+		// Save the updated transaction
+		await transaction.save();
 
-    return res.status(200).json({ success: true, message: "Transaction updated" });
-  } catch (error) {
-    console.error("STK Callback Error:", error.message);
-    return res.status(500).json({ success: false, message: "Callback processing failed" });
-  }
+		return res.status(200).json({ success: true, message: "Transaction updated" });
+	} catch (error) {
+		console.error("STK Callback Error:", error.message);
+		return res.status(500).json({ success: false, message: "Callback processing failed" });
+	}
 };
 
